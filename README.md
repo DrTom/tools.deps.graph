@@ -26,17 +26,22 @@ Run it in your current project:
 clj -A:graph <options>
 ```
 
-If no options are provided, tools.deps.graph will create a dependency graph for the current project and display it. Ctrl-C to quit.
+Run `clj -A:graph -h` for available options:
+
+```
+usage: clj -A:graph <options>
 
 Options:
-
-* -d DEPSFILE - deps.edn file to read, default=deps.edn
-* -t - Trace mode, will output one image per expansion step
-* -f TRACEFILE - Trace file mode - read trace file, don't use deps.edn file
-* -o FILE - Output file, in trace mode, required and will create N images with this as a prefix
-* -a - Concatenated alias names to enable when reading deps file
-* --trace-omit - Comma-delimited list of libs to skip in trace images"
-* --size- Add jar size info to dep graph"
+  -d, --deps DEPSFILE                deps.edn               deps.edn file to read, default ./deps.edn
+  -t, --trace                                               Trace mode, output one image per trace step
+  -f, --tracefile TRACEFILE                                 Read trace directly from file, output one image per trace step
+  -h, --help
+  -o, --output-file FILE             deps                   Basename of output-file without extension
+      --output-format OUTPUT_FORMAT  :viewer                Either png, pdf, svg, or viewer
+  -a, --aliases ALIASES                                     Concatenated alias names to enable
+      --trace-omit LIBS              [org.clojure/clojure]  Comma delimited list of libs to omit in trace imgs
+      --size                                                Include sizes in dep graph nodes
+```
 
 # Examples
 
@@ -44,41 +49,41 @@ Options:
 clj -A:graph
 ```
 
-Show dependency graph for current project
+Write the dependency graph for the current project to `deps.pdf`.
 
 ```
-clj -A:graph -o deps.png
+clj -A:graph
 ```
 
-Show dependency graph for current project with jar sizes
+Same as above including java sizes
 
 ```
-clj -A:graph -o deps.png --size
+clj -A:graph  --size
 ```
 
-Save dependency graph to deps.png for current project
+Save dependency graph for `mydeps.edn`
 
 ```
-clj -A:graph -d mydeps.edn -o mydeps.png
+clj -A:graph -d mydeps.edn -output-file mydeps --output-format pdf
 ```
 
 Read mydeps.edn, create deps graph, output image to mydeps.png
 
 ```
-clj -A:graph -t -o trace
+clj -A:graph -t -o mydeps --output-format png
 ```
 
-Read deps.edn, trace expansion, output steps as trace100.png, trace101.png, ...
+Read deps.edn, trace expansion, output steps as trace100, trace101, ...
 
 ```
-clj -A:graph -d mydeps.edn -t -o trace
+clj -A:graph -d mydeps.edn -t -o trace --output-format svg
 ```
 
 Read mydeps.edn, trace expansion, output trace100.png, ...
 
 ```
 clj -Strace
-clj -A:graph -f trace.edn -o trace
+clj -A:graph -f trace.edn -o trace --output-format svg
 ```
 
 Use -Strace to output a trace.edn file.
